@@ -19,16 +19,32 @@ reviewed and approved.
 - **Exit criteria:** `pnpm install`, `turbo run lint typecheck test build`
   all succeed with nothing but scaffolding.
 
-## Milestone 1 — Supabase project + local dev stack
+## Milestone 1 — Supabase project + local dev stack ✅
 
 - Create the Supabase project (real account setup — see
-  [SUPABASE.md](SUPABASE.md)).
+  [SUPABASE.md](SUPABASE.md)). Done: "MicroAppsDB"
+  (`jrmkuayanajunmehpdmy`, `ca-central-1`), linked via `supabase link`.
 - `supabase/` directory, local dev stack running via Supabase CLI.
-- `public` schema: `users`, `subscriptions` tables + RLS.
-- Auth configured (email/password + one OAuth provider).
+  **Deferred**: Docker not yet installed, so the local stack itself isn't
+  running — see [SUPABASE.md](SUPABASE.md)'s "Local development" status
+  note. `supabase init`/`link`/migrations/config push all work without it.
+- `public` schema: `users`, `subscriptions` tables + RLS. Done — see
+  `supabase/migrations/20260724213933_init_public_schema.sql`, pushed to
+  the remote project.
+- Auth configured (email/password + one OAuth provider). Email/password
+  enabled by default; Google OAuth scaffolded in `config.toml`
+  (`[auth.external.google]`, disabled until real credentials exist).
+  `enable_confirmations` pushed to `false` on remote to match local
+  config, enabling frictionless dev signup.
 - **Exit criteria:** can sign up/sign in against the local Supabase stack
   from a throwaway script; RLS policies have at least a smoke test
-  confirming cross-user isolation.
+  confirming cross-user isolation. **Met against the real remote project
+  instead of a local stack** (see deferral note above) —
+  `supabase/tests/src/rls.smoke.test.ts` signs up two real users and
+  confirms: auto-created `public.users` row via trigger, each user can
+  read their own `users`/`subscriptions` rows, neither can read the
+  other's, and direct client-side `subscriptions` inserts are rejected
+  (service-role-only). All 5 assertions pass.
 
 ## Milestone 2 — `packages/data`, `packages/sync`, `packages/logger`, `packages/validation`
 

@@ -65,7 +65,11 @@ effort is allocated to match that asymmetry.
   [SUPABASE.md](SUPABASE.md)) for the small number of tests that verify
   RLS policies actually enforce isolation — this matters enough
   (security boundary, see [SECURITY.md](SECURITY.md)) to test against
-  real Postgres rather than assume the SQL is correct.
+  real Postgres rather than assume the SQL is correct. **Temporarily**,
+  per [SUPABASE.md](SUPABASE.md)'s "Local development" note, these run
+  against the real remote project instead (Docker not yet set up) —
+  `supabase/tests/rls.smoke.test.ts` creates real throwaway auth users on
+  each run as a result. Move back to the local stack once available.
 
 ## Where tests live
 

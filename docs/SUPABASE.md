@@ -138,3 +138,16 @@ Functions emulation, all in Docker) is the default dev environment —
 developing against a shared remote "dev" project is avoided so schema
 experiments don't collide with anything else. `supabase start` /
 `supabase db reset` are the primary local workflow commands.
+
+**Current status (as of Milestone 1): deliberately deferred.** Docker is
+not installed on the primary dev machine yet, so for now migrations are
+written locally and applied directly to the real remote project
+(`supabase db push` / `supabase config push`) rather than verified
+against a local stack first. This is a conscious, temporary tradeoff, not
+a silent deviation — schema/auth changes go straight to the one real
+project instead of a disposable one, and the RLS smoke test (see
+[TESTING.md](TESTING.md)) creates real throwaway auth users in that
+project on every run rather than in a local instance. Revert to the
+documented local-first workflow once Docker is set up; nothing about the
+migration files or RLS policies themselves is written any differently in
+the meantime.
