@@ -1,0 +1,25 @@
+{
+  "name": "@microapps/config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "files": [
+    "tsconfig.base.json",
+    "eslint.base.js",
+    "eslint.app.js",
+    "jest.base.js"
+  ],
+  "scripts": {
+    "lint": "echo \"(config: nothing to lint)\"",
+    "typecheck": "echo \"(config: nothing to typecheck)\"",
+    "test": "echo \"(config: nothing to test)\"",
+    "build": "echo \"(config: nothing to build)\""
+  },
+  "dependencies": {
+    "eslint": "^8.57.1",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0"
+  }
+}
