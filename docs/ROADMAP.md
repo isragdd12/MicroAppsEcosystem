@@ -46,20 +46,40 @@ reviewed and approved.
   other's, and direct client-side `subscriptions` inserts are rejected
   (service-role-only). All 5 assertions pass.
 
-## Milestone 2 — `packages/data`, `packages/sync`, `packages/logger`, `packages/validation`
+## Milestone 2 — `packages/data`, `packages/sync`, `packages/logger`, `packages/validation` ✅
 
-- Generic `Repository<T>` base class, SQLite client setup, migration
-  runner (see [DATABASE.md](DATABASE.md), [SQLITE.md](SQLITE.md)).
+- Generic `Repository<T>` base class, SQLite client setup (Drizzle ORM +
+  `better-sqlite3` for tests, `expo-sqlite`'s driver deferred to the app
+  layer), migration runner (see [DATABASE.md](DATABASE.md),
+  [SQLITE.md](SQLITE.md)). Done — `create`/`getById`/`list`/`update`/
+  `delete`, soft-delete filtering, outbox enqueueing in the same
+  transaction as every mutating write, `ValidationError`/`NotFoundError`.
 - Sync engine: outbox, push/pull loop, last-write-wins conflict
   resolution (see [SYNC_ENGINE.md](SYNC_ENGINE.md)) — built and unit
-  tested against a generic fixture table, no real app yet.
+  tested against a generic fixture table, no real app yet. Done —
+  `pushOutbox`/`pullRemoteChanges` against a backend-agnostic
+  `SyncBackend` interface (a real Supabase-backed implementation is an
+  app-layer concern for a later milestone); an `InMemorySyncBackend` test
+  fake stands in for Postgres.
 - `Logger` interface + console implementation (see
-  [ERROR_HANDLING.md](ERROR_HANDLING.md)).
-- Shared Zod helper utilities (see [DATABASE.md](DATABASE.md)).
+  [ERROR_HANDLING.md](ERROR_HANDLING.md)). Done.
+- Shared Zod helper utilities (see [DATABASE.md](DATABASE.md)). Done —
+  `syncableEntityBaseSchema` (the common columns every entity extends)
+  and `createInputSchema`.
 - **Exit criteria:** a fixture entity can be created locally, pushed,
   pulled on a second "device" (second local DB instance in a test), and a
   conflict between the two resolves correctly — all under test, per
-  [TESTING.md](TESTING.md)'s priority order.
+  [TESTING.md](TESTING.md)'s priority order. **Met** —
+  `packages/sync/src/sync.e2e.test.ts` creates a fixture "widget" on
+  device A, pushes it, pulls it down on an independent device B instance,
+  then has both devices edit the same row from a shared synced state:
+  device A's push wins, device B's push is correctly rejected as a
+  conflict and its local state is overwritten with A's winning version
+  (last-write-wins by server-assigned timestamp, not push order). A key
+  implementation detail worth noting: the outbox records `basedOnUpdatedAt`
+  (the row's pre-edit synced timestamp) at enqueue time — deriving it
+  from the row's _new_ updatedAt instead would make every push look like
+  a fresh insert and the conflict check would never trigger.
 
 ## Milestone 3 — `packages/theme`, `packages/ui` (primitives only)
 
