@@ -81,18 +81,47 @@ reviewed and approved.
   from the row's _new_ updatedAt instead would make every push look like
   a fresh insert and the conflict check would never trigger.
 
-## Milestone 3 — `packages/theme`, `packages/ui` (primitives only)
+## Milestone 3 — `packages/theme`, `packages/ui` (primitives only) ⚠️ partially met
 
 - Theme token contract + `ThemeProvider` (see
-  [THEME_SYSTEM.md](THEME_SYSTEM.md)).
+  [THEME_SYSTEM.md](THEME_SYSTEM.md)). Done — `Theme`/`ThemeColors`/
+  `ThemeTypography`/`ThemeRadii` types, `defaultLightTheme`/
+  `defaultDarkTheme`, `ThemeProvider` + `useTheme()` (falls back to the
+  default light theme when no provider is present).
 - Core primitives: Button, TextInput, Card, List/ListItem, Screen layout
   wrapper, Spinner, EmptyState/ErrorState, Toast (see
   [UI_SYSTEM.md](UI_SYSTEM.md), [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md)).
+  Done, plus the layout primitives (Stack, Row, Spacer) UI_SYSTEM.md
+  calls for. Every primitive reads exclusively from `useTheme()` (no
+  hardcoded colors/spacing), has an accessibility role/label, and meets
+  the 44pt minimum touch target.
 - A minimal default theme + a tiny throwaway harness app (or Expo's
   preview tooling) to visually verify primitives in light/dark on Web and
-  Android before any real app consumes them.
+  Android before any real app consumes them. **Not done** — see below.
 - **Exit criteria:** primitives render correctly in light/dark, on Web
-  and Android, against the default theme.
+  and Android, against the default theme. **Partially met**: all 24
+  primitive tests pass via `@testing-library/react-native`'s test
+  renderer (unit-level render + interaction checks — button presses,
+  conditional rendering, accessible roles/labels), and the theme system
+  is exercised in both light and dark via `packages/theme`'s own tests.
+  What has **not** happened yet is visually rendering these primitives in
+  an actual running Web or Android target — there is no Expo app yet
+  (that's Milestone 4), so "looks correct on Web and Android" is
+  unverified beyond React Native Web's general compatibility guarantees.
+  Revisit this once Milestone 4's Pet Care shell exists and can host a
+  quick visual smoke check per [THEME_SYSTEM.md](THEME_SYSTEM.md)'s
+  "Testing a theme" section.
+- **Toolchain note:** `packages/ui`'s Jest config needed an explicit
+  `transformIgnorePatterns` override — React Native's own jest-preset
+  assumes a flat `node_modules/react-native/...` layout and silently
+  fails to transform RN's Flow-typed internals under pnpm's nested
+  `node_modules/.pnpm/...` structure. Also, running `turbo run build`
+  (and other tasks) at full default concurrency triggered an
+  out-of-memory crash from too many concurrent `tsc` processes on this
+  machine; root `package.json`'s scripts now pass `--concurrency=4` to
+  Turborepo, and CI was updated to go through those scripts (`pnpm run
+<task>`) rather than calling `turbo run <task>` directly, so the limit
+  isn't silently bypassed.
 
 ## Milestone 4 — Pet Care skeleton: auth-optional shell, no features yet
 

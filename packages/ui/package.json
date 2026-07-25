@@ -11,12 +11,26 @@
     "test": "jest --passWithNoTests",
     "build": "tsc -p tsconfig.json"
   },
+  "dependencies": {
+    "@microapps/theme": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
   "devDependencies": {
     "eslint": "^8.57.1",
+    "@babel/core": "^7.26.0",
     "@microapps/config": "workspace:*",
+    "@react-native/babel-preset": "^0.76.9",
+    "@testing-library/react-native": "^12.9.0",
     "@types/jest": "^29.5.14",
+    "@types/react": "^18.3.18",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
-    "ts-jest": "^29.2.5",
+    "react": "^18.3.1",
+    "react-native": "^0.76.5",
+    "react-test-renderer": "^18.3.1",
     "typescript": "^5.7.2"
   }
 }

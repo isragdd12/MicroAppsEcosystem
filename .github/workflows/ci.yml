@@ -28,16 +28,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm turbo run lint
+        run: pnpm run lint
 
       - name: Typecheck
-        run: pnpm turbo run typecheck
+        run: pnpm run typecheck
 
       - name: Test
-        run: pnpm turbo run test
+        run: pnpm run test
 
       - name: Build
-        run: pnpm turbo run build
+        run: pnpm run build
 
       - name: Audit (advisory)
         run: pnpm audit --audit-level=high || true

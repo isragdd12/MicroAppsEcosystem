@@ -6,10 +6,10 @@
     "node": ">=20"
   },
   "scripts": {
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
-    "build": "turbo run build",
+    "lint": "turbo run lint --concurrency=4",
+    "typecheck": "turbo run typecheck --concurrency=4",
+    "test": "turbo run test --concurrency=4",
+    "build": "turbo run build --concurrency=4",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
