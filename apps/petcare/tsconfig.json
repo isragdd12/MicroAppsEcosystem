@@ -18,6 +18,8 @@
     "utils",
     "theme",
     "config",
-    "app.config.ts"
+    "app.config.ts",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }
