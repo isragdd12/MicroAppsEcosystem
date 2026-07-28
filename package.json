@@ -21,6 +21,11 @@
     "turbo": "^2.3.3",
     "typescript": "^5.7.2"
   },
+  "pnpm": {
+    "overrides": {
+      "drizzle-orm": "^0.38.4"
+    }
+  },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix"

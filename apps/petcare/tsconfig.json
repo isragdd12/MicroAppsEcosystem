@@ -1,0 +1,23 @@
+{
+  "extends": "@microapps/config/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2022", "DOM"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "app",
+    "features",
+    "components",
+    "utils",
+    "theme",
+    "config",
+    "app.config.ts"
+  ]
+}

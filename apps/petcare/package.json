@@ -1,0 +1,48 @@
+{
+  "name": "@microapps/petcare",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "web": "expo start --web",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint app features utils theme config --ext .ts,.tsx --ignore-pattern '**/*.d.ts'"
+  },
+  "dependencies": {
+    "@microapps/ai": "workspace:*",
+    "@microapps/auth": "workspace:*",
+    "@microapps/data": "workspace:*",
+    "@microapps/logger": "workspace:*",
+    "@microapps/sync": "workspace:*",
+    "@microapps/theme": "workspace:*",
+    "@microapps/ui": "workspace:*",
+    "@microapps/validation": "workspace:*",
+    "@supabase/supabase-js": "^2.47.10",
+    "@tanstack/react-query": "^5.62.0",
+    "drizzle-orm": "^0.38.3",
+    "expo": "~52.0.33",
+    "expo-constants": "~17.0.8",
+    "expo-image-picker": "~16.0.3",
+    "expo-notifications": "~0.29.9",
+    "expo-router": "~4.0.17",
+    "expo-secure-store": "~14.0.1",
+    "expo-sqlite": "~15.1.2",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-native": "0.76.5",
+    "react-native-purchases": "^8.2.3",
+    "react-native-web": "~0.19.13",
+    "zod": "^3.23.8",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@microapps/config": "workspace:*",
+    "@types/react": "~18.3.12",
+    "drizzle-kit": "^0.28.0",
+    "typescript": "~5.7.2"
+  }
+}
