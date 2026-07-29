@@ -5,13 +5,17 @@ import { createPetSchema, type CreatePetInput } from '../validation/petSchema';
 
 import type { Pet } from './PetRepository';
 
+// Queries the public-schema view (petcare_pets) which mirrors petcare.pets
+// with RLS enforced via security_invoker. This avoids needing to expose
+// the 'petcare' schema in PostgREST's db-schemas setting.
+const TABLE = 'petcare_pets';
+
 export class SupabasePetRepository {
   constructor(private readonly ownerId: string | null) {}
 
   async list(): Promise<Pet[]> {
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('pets')
+      .from(TABLE)
       .select('*')
       .is('deleted_at', null)
       .order('created_at', { ascending: true });
@@ -21,8 +25,7 @@ export class SupabasePetRepository {
 
   async getById(id: string): Promise<Pet | null> {
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('pets')
+      .from(TABLE)
       .select('*')
       .eq('id', id)
       .is('deleted_at', null)
@@ -49,8 +52,7 @@ export class SupabasePetRepository {
       deleted_at: null,
     };
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('pets')
+      .from(TABLE)
       .insert(row)
       .select()
       .single();
@@ -70,8 +72,7 @@ export class SupabasePetRepository {
     if (patch.notes !== undefined) updates.notes = patch.notes;
 
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('pets')
+      .from(TABLE)
       .update(updates)
       .eq('id', id)
       .select()
@@ -83,8 +84,7 @@ export class SupabasePetRepository {
   async delete(id: string): Promise<void> {
     const now = new Date().toISOString();
     const { error } = await supabase
-      .schema('petcare')
-      .from('pets')
+      .from(TABLE)
       .update({ deleted_at: now, updated_at: now })
       .eq('id', id);
     if (error) throw error;

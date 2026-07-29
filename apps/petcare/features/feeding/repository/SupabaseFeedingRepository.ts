@@ -8,13 +8,16 @@ import {
 
 import type { Feeding } from './FeedingRepository';
 
+// Queries the public-schema view (petcare_feedings) which mirrors
+// petcare.feedings with RLS enforced via security_invoker.
+const TABLE = 'petcare_feedings';
+
 export class SupabaseFeedingRepository {
   constructor(private readonly ownerId: string | null) {}
 
   async list(): Promise<Feeding[]> {
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('feedings')
+      .from(TABLE)
       .select('*')
       .is('deleted_at', null)
       .order('fed_at', { ascending: false });
@@ -24,8 +27,7 @@ export class SupabaseFeedingRepository {
 
   async listForPet(petId: string): Promise<Feeding[]> {
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('feedings')
+      .from(TABLE)
       .select('*')
       .eq('pet_id', petId)
       .is('deleted_at', null)
@@ -51,8 +53,7 @@ export class SupabaseFeedingRepository {
       deleted_at: null,
     };
     const { data, error } = await supabase
-      .schema('petcare')
-      .from('feedings')
+      .from(TABLE)
       .insert(row)
       .select()
       .single();
@@ -63,8 +64,7 @@ export class SupabaseFeedingRepository {
   async delete(id: string): Promise<void> {
     const now = new Date().toISOString();
     const { error } = await supabase
-      .schema('petcare')
-      .from('feedings')
+      .from(TABLE)
       .update({ deleted_at: now, updated_at: now })
       .eq('id', id);
     if (error) throw error;
