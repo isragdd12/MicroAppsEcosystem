@@ -5,10 +5,7 @@ import { createPetSchema, type CreatePetInput } from '../validation/petSchema';
 
 import type { Pet } from './PetRepository';
 
-// Queries the public-schema view (petcare_pets) which mirrors petcare.pets
-// with RLS enforced via security_invoker. This avoids needing to expose
-// the 'petcare' schema in PostgREST's db-schemas setting.
-const TABLE = 'petcare_pets';
+const TABLE = 'pets';
 
 export class SupabasePetRepository {
   constructor(private readonly ownerId: string | null) {}

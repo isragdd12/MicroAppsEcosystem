@@ -8,9 +8,7 @@ import {
 
 import type { Feeding } from './FeedingRepository';
 
-// Queries the public-schema view (petcare_feedings) which mirrors
-// petcare.feedings with RLS enforced via security_invoker.
-const TABLE = 'petcare_feedings';
+const TABLE = 'feedings';
 
 export class SupabaseFeedingRepository {
   constructor(private readonly ownerId: string | null) {}
