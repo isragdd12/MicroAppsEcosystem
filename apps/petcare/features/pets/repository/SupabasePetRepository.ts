@@ -51,13 +51,11 @@ export class SupabasePetRepository {
       updated_at: now,
       deleted_at: null,
     };
-    const { data, error } = await supabase
-      .from(TABLE)
-      .insert(row)
-      .select()
-      .single();
+    // Views don't expose a primary key to PostgREST, so .select() after
+    // .insert() causes a 400. We own the UUID so just return directly.
+    const { error } = await supabase.from(TABLE).insert(row);
     if (error) throw error;
-    return rowToPet(data);
+    return rowToPet(row);
   }
 
   async update(id: string, patch: Partial<CreatePetInput>): Promise<Pet> {
@@ -71,14 +69,12 @@ export class SupabasePetRepository {
     if (patch.photoUrl !== undefined) updates.photo_url = patch.photoUrl;
     if (patch.notes !== undefined) updates.notes = patch.notes;
 
-    const { data, error } = await supabase
-      .from(TABLE)
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
+    const { error } = await supabase.from(TABLE).update(updates).eq('id', id);
     if (error) throw error;
-    return rowToPet(data);
+    // Re-fetch so the caller gets the current server state
+    const updated = await this.getById(id);
+    if (!updated) throw new Error(`Pet ${id} not found after update`);
+    return updated;
   }
 
   async delete(id: string): Promise<void> {

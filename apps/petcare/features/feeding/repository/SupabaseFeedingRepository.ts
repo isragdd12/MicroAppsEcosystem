@@ -52,13 +52,10 @@ export class SupabaseFeedingRepository {
       updated_at: now,
       deleted_at: null,
     };
-    const { data, error } = await supabase
-      .from(TABLE)
-      .insert(row)
-      .select()
-      .single();
+    // Views don't expose a PK to PostgREST; .select() after .insert() → 400.
+    const { error } = await supabase.from(TABLE).insert(row);
     if (error) throw error;
-    return rowToFeeding(data);
+    return rowToFeeding(row);
   }
 
   async delete(id: string): Promise<void> {
