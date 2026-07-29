@@ -9,8 +9,7 @@ export function useLogFeeding() {
   const repo = useFeedingRepository();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreateFeedingInput) =>
-      Promise.resolve(repo.create(input)),
+    mutationFn: async (input: CreateFeedingInput) => repo.create(input),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: FEEDINGS_QUERY_KEY });
     },

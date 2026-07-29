@@ -7,9 +7,8 @@ export function useDeletePet() {
   const repo = usePetRepository();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => {
-      repo.delete(id);
-      return Promise.resolve();
+    mutationFn: async (id: string) => {
+      await repo.delete(id);
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: PETS_QUERY_KEY });

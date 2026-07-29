@@ -9,13 +9,13 @@ export function useUpdatePet() {
   const repo = usePetRepository();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
+    mutationFn: async ({
       id,
       patch,
     }: {
       id: string;
       patch: Partial<CreatePetInput>;
-    }) => Promise.resolve(repo.update(id, patch)),
+    }) => repo.update(id, patch),
     onSuccess: (_data, { id }) => {
       void queryClient.invalidateQueries({ queryKey: PETS_QUERY_KEY });
       void queryClient.invalidateQueries({ queryKey: ['pets', id] });

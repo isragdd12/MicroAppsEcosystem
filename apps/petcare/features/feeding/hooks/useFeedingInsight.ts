@@ -10,7 +10,8 @@ export function useFeedingInsight(petId: string, petName: string) {
   return useQuery({
     queryKey: ['feeding-insight', petId],
     queryFn: async () => {
-      const feedings = repo.listForPet(petId).slice(0, 20);
+      const feedingsRaw = await repo.listForPet(petId);
+      const feedings = feedingsRaw.slice(0, 20);
       if (feedings.length < 3) return null;
 
       const summary = feedings

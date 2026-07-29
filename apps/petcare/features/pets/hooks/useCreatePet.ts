@@ -9,7 +9,7 @@ export function useCreatePet() {
   const repo = usePetRepository();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: CreatePetInput) => Promise.resolve(repo.create(input)),
+    mutationFn: async (input: CreatePetInput) => repo.create(input),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: PETS_QUERY_KEY });
     },
