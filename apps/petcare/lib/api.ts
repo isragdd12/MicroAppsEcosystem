@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { supabase } from '../config/supabase';
-import type { CreateFeedingInput, CreatePetInput, Feeding, Pet } from './types';
+import type { CreateFeedingInput, CreatePetInput, Feeding, HealthRecord, Pet, PetWeight } from './types';
 import { createFeedingSchema, createPetSchema } from './types';
 
 // ─── Pets ───────────────────────────────────────────────────────────────────
@@ -124,6 +124,87 @@ export async function addFeeding(
   return rowToFeeding(row);
 }
 
+// ─── Weights ────────────────────────────────────────────────────────────────
+
+export async function listWeights(petId: string): Promise<PetWeight[]> {
+  const { data, error } = await supabase
+    .from('pet_weights')
+    .select('*')
+    .eq('pet_id', petId)
+    .order('measured_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(rowToWeight);
+}
+
+export async function addWeight(
+  input: { petId: string; weightKg: number; measuredAt: string; notes?: string },
+  ownerId: string | null,
+): Promise<PetWeight> {
+  const now = new Date().toISOString();
+  const row = {
+    id: uuidv4(),
+    pet_id: input.petId,
+    weight_kg: input.weightKg,
+    measured_at: input.measuredAt,
+    notes: input.notes ?? null,
+    owner_id: ownerId,
+    created_at: now,
+  };
+  const { error } = await supabase.from('pet_weights').insert(row);
+  if (error) throw error;
+  return rowToWeight(row);
+}
+
+export async function deleteWeight(id: string): Promise<void> {
+  const { error } = await supabase.from('pet_weights').delete().eq('id', id);
+  if (error) throw error;
+}
+
+// ─── Health Records ──────────────────────────────────────────────────────────
+
+export async function listHealthRecords(petId: string): Promise<HealthRecord[]> {
+  const { data, error } = await supabase
+    .from('health_records')
+    .select('*')
+    .eq('pet_id', petId)
+    .order('record_date', { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(rowToHealthRecord);
+}
+
+export async function addHealthRecord(
+  input: {
+    petId: string;
+    recordType: 'vet_visit' | 'vaccination' | 'medication' | 'note';
+    title: string;
+    description?: string;
+    recordDate: string;
+    vetName?: string;
+  },
+  ownerId: string | null,
+): Promise<HealthRecord> {
+  const now = new Date().toISOString();
+  const row = {
+    id: uuidv4(),
+    pet_id: input.petId,
+    record_type: input.recordType,
+    title: input.title,
+    description: input.description ?? null,
+    record_date: input.recordDate,
+    vet_name: input.vetName ?? null,
+    owner_id: ownerId,
+    created_at: now,
+  };
+  const { error } = await supabase.from('health_records').insert(row);
+  if (error) throw error;
+  return rowToHealthRecord(row);
+}
+
+export async function deleteHealthRecord(id: string): Promise<void> {
+  const { error } = await supabase.from('health_records').delete().eq('id', id);
+  if (error) throw error;
+}
+
 // ─── Row mappers ────────────────────────────────────────────────────────────
 
 function rowToPet(row: Record<string, unknown>): Pet {
@@ -156,5 +237,31 @@ function rowToFeeding(row: Record<string, unknown>): Feeding {
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
     deletedAt: (row.deleted_at as string | null) ?? null,
+  };
+}
+
+function rowToWeight(row: Record<string, unknown>): PetWeight {
+  return {
+    id: row.id as string,
+    petId: row.pet_id as string,
+    weightKg: row.weight_kg as number,
+    measuredAt: row.measured_at as string,
+    notes: (row.notes as string | null) ?? null,
+    ownerId: (row.owner_id as string | null) ?? null,
+    createdAt: row.created_at as string,
+  };
+}
+
+function rowToHealthRecord(row: Record<string, unknown>): HealthRecord {
+  return {
+    id: row.id as string,
+    petId: row.pet_id as string,
+    recordType: row.record_type as HealthRecord['recordType'],
+    title: row.title as string,
+    description: (row.description as string | null) ?? null,
+    recordDate: row.record_date as string,
+    vetName: (row.vet_name as string | null) ?? null,
+    ownerId: (row.owner_id as string | null) ?? null,
+    createdAt: row.created_at as string,
   };
 }

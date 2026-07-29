@@ -49,3 +49,25 @@ export interface Feeding {
   updatedAt: string;
   deletedAt: string | null;
 }
+
+export interface PetWeight {
+  id: string;
+  petId: string;
+  weightKg: number;
+  measuredAt: string;
+  notes: string | null;
+  ownerId: string | null;
+  createdAt: string;
+}
+
+export interface HealthRecord {
+  id: string;
+  petId: string;
+  recordType: 'vet_visit' | 'vaccination' | 'medication' | 'note';
+  title: string;
+  description: string | null;
+  recordDate: string;
+  vetName: string | null;
+  ownerId: string | null;
+  createdAt: string;
+}

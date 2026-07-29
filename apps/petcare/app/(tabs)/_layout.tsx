@@ -14,7 +14,8 @@ export default function TabsLayout() {
         tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: 'My Pets', tabBarIcon: ({ color }) => <Text style={{ color }}>🐾</Text> }} />
+      <Tabs.Screen name="home" options={{ title: 'Home', tabBarIcon: ({ color }) => <Text style={{ color }}>🏠</Text> }} />
+      <Tabs.Screen name="index" options={{ title: 'Pets', tabBarIcon: ({ color }) => <Text style={{ color }}>🐾</Text> }} />
       <Tabs.Screen name="feeding" options={{ title: 'Feeding', tabBarIcon: ({ color }) => <Text style={{ color }}>🍽️</Text> }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: ({ color }) => <Text style={{ color }}>⚙️</Text> }} />
     </Tabs>

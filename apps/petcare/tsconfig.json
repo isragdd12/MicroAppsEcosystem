@@ -15,6 +15,7 @@
     "app",
     "features",
     "components",
+    "lib",
     "utils",
     "theme",
     "config",
