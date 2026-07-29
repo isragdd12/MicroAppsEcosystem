@@ -5,7 +5,7 @@ import {
   Text,
   type TextInputProps as RNTextInputProps,
 } from 'react-native';
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 
 export interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   label?: string;

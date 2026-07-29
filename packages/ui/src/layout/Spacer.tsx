@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 
 export interface SpacerProps {
   /** Size in theme spacing units (see docs/THEME_SYSTEM.md). */

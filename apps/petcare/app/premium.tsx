@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PremiumScreen } from '../features/settings/screens/PremiumScreen';
+import { PremiumScreen } from '../components/PremiumScreen';
 
 export default function PremiumRoute() {
   return <PremiumScreen />;

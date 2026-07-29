@@ -11,27 +11,11 @@
     "test": "turbo run test --concurrency=4",
     "build": "turbo run build --concurrency=4",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "prepare": "husky"
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.2",
     "prettier": "^3.4.2",
     "turbo": "^2.3.3",
     "typescript": "^5.7.2"
-  },
-  "pnpm": {
-    "overrides": {
-      "drizzle-orm": "^0.38.4"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix"
-    ],
-    "*.{ts,tsx,md,json,js}": [
-      "prettier --write"
-    ]
   }
 }

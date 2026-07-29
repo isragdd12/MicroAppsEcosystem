@@ -6,6 +6,7 @@ const REVENUECAT_ANDROID_KEY =
 export function initializePurchases(userId: string | null) {
   if (Platform.OS === 'web' || !REVENUECAT_ANDROID_KEY) return;
   // Dynamic import keeps react-native-purchases out of the web bundle
+  // @ts-ignore — react-native-purchases optional native dep
   void import('react-native-purchases').then(({ default: Purchases }) => {
     if (Platform.OS === 'android') {
       Purchases.configure({ apiKey: REVENUECAT_ANDROID_KEY });
@@ -19,6 +20,7 @@ export const ENTITLEMENTS = { premium: 'premium' } as const;
 export async function checkPremiumEntitlement(): Promise<boolean> {
   if (Platform.OS === 'web') return false;
   try {
+    // @ts-ignore — react-native-purchases optional native dep
     const { default: Purchases } = await import('react-native-purchases');
     const info = await Purchases.getCustomerInfo();
     return info.entitlements.active[ENTITLEMENTS.premium] !== undefined;

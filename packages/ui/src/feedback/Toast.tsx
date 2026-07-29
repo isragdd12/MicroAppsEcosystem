@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { useTheme } from '@microapps/theme';
-import type { Theme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
+import type { Theme } from '@microapps/core';
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'danger';
 

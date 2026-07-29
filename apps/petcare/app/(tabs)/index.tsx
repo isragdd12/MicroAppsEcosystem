@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { PetsListScreen } from '../../features/pets/screens/PetsListScreen';
+import { PetsScreen } from '../../components/PetsScreen';
 
 export default function PetsTab() {
-  return <PetsListScreen />;
+  return <PetsScreen />;
 }

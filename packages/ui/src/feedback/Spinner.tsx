@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 
 export interface SpinnerProps {
   size?: 'small' | 'large';

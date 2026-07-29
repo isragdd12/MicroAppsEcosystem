@@ -1,4 +1,4 @@
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Text } from 'react-native';
@@ -11,33 +11,12 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-        },
+        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'My Pets',
-          tabBarIcon: ({ color }) => <Text style={{ color }}>🐾</Text>,
-        }}
-      />
-      <Tabs.Screen
-        name="feeding"
-        options={{
-          title: 'Feeding',
-          tabBarIcon: ({ color }) => <Text style={{ color }}>🍽️</Text>,
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <Text style={{ color }}>⚙️</Text>,
-        }}
-      />
+      <Tabs.Screen name="index" options={{ title: 'My Pets', tabBarIcon: ({ color }) => <Text style={{ color }}>🐾</Text> }} />
+      <Tabs.Screen name="feeding" options={{ title: 'Feeding', tabBarIcon: ({ color }) => <Text style={{ color }}>🍽️</Text> }} />
+      <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: ({ color }) => <Text style={{ color }}>⚙️</Text> }} />
     </Tabs>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, type ViewProps } from 'react-native';
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 
 export interface CardProps extends ViewProps {
   children?: React.ReactNode;

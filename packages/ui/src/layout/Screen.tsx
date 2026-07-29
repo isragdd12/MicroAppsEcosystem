@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, View, type ViewStyle } from 'react-native';
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 
 export interface ScreenProps {
   /** Wraps children in a ScrollView — off by default for screens that

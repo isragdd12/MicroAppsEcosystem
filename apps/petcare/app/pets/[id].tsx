@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PetDetailScreen } from '../../features/pets/screens/PetDetailScreen';
+import { PetDetailScreen } from '../../components/PetDetailScreen';
 
 export default function PetDetailRoute() {
   return <PetDetailScreen />;

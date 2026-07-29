@@ -6,8 +6,8 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { useTheme } from '@microapps/theme';
-import type { Theme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
+import type { Theme } from '@microapps/core';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';

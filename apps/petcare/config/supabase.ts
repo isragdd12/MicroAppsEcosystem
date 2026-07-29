@@ -1,4 +1,4 @@
-import { createAuthClient } from '@microapps/auth';
+import { createAuthClient } from '@microapps/core';
 import { Platform } from 'react-native';
 
 import { getSupabaseConfig } from './env';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, type ViewProps, type ViewStyle } from 'react-native';
-import { useTheme } from '@microapps/theme';
+import { useTheme } from '@microapps/core';
 
 export interface StackProps extends ViewProps {
   /** Gap between children, in theme spacing units (see docs/THEME_SYSTEM.md). */

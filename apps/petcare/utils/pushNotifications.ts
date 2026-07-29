@@ -1,4 +1,6 @@
+// @ts-ignore — expo-notifications optional dep
 import * as Notifications from 'expo-notifications';
+// @ts-ignore — expo-notifications optional dep
 import { SchedulableTriggerInputTypes } from 'expo-notifications';
 import { Platform } from 'react-native';
 

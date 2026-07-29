@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AddFeedingScreen } from '../../features/feeding/screens/AddFeedingScreen';
+import { AddFeedingScreen } from '../../components/AddFeedingScreen';
 
 export default function AddFeedingRoute() {
   return <AddFeedingScreen />;

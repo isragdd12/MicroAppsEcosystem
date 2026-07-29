@@ -1,4 +1,4 @@
-import type { Theme } from '@microapps/theme';
+import type { Theme } from '@microapps/core';
 
 const spacing = (multiplier: number) => multiplier * 4;
 const radii: Theme['radii'] = { sm: 6, md: 12, lg: 20, full: 9999 };

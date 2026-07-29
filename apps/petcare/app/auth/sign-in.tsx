@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SignInScreen } from '../../features/auth/screens/SignInScreen';
+import { SignInScreen } from '../../components/SignInScreen';
 
 export default function SignInRoute() {
   return <SignInScreen />;
