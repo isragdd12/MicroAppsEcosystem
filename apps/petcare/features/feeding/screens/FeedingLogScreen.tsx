@@ -2,7 +2,7 @@ import { useTheme } from '@microapps/theme';
 import { EmptyState, ErrorState, Screen, Spinner } from '@microapps/ui';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Platform, Pressable, Text, View } from 'react-native';
 
 import { useFeedings } from '../hooks/useFeedings';
 import type { Feeding } from '../repository/FeedingRepository';
@@ -42,6 +42,28 @@ function FeedingRow({ feeding }: { feeding: Feeding }) {
 export function FeedingLogScreen() {
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
+
+  if (Platform.OS === 'web') {
+    return (
+      <Screen>
+        <View style={{ padding: spacing(4) }}>
+          <Text
+            style={{
+              color: colors.text,
+              fontSize: typography.size.lg,
+              fontWeight: 'bold',
+            }}
+          >
+            Feedings
+          </Text>
+          <Text style={{ color: colors.textMuted, marginTop: spacing(2) }}>
+            Feeding log is available on the Android app.
+          </Text>
+        </View>
+      </Screen>
+    );
+  }
+
   const { data: feedings, isLoading, error } = useFeedings();
 
   if (isLoading) return <Spinner />;

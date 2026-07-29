@@ -2,7 +2,7 @@ import { useTheme } from '@microapps/theme';
 import { EmptyState, ErrorState, Screen, Spinner } from '@microapps/ui';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { FlatList, Pressable, Text, View } from 'react-native';
+import { FlatList, Platform, Pressable, Text, View } from 'react-native';
 
 import { usePets } from '../hooks/usePets';
 import type { Pet } from '../repository/PetRepository';
@@ -49,6 +49,28 @@ function PetCard({ pet, onPress }: { pet: Pet; onPress: () => void }) {
 export function PetsListScreen() {
   const { colors, typography, spacing } = useTheme();
   const router = useRouter();
+
+  if (Platform.OS === 'web') {
+    return (
+      <Screen>
+        <View style={{ padding: spacing(4) }}>
+          <Text
+            style={{
+              color: colors.text,
+              fontSize: typography.size.lg,
+              fontWeight: 'bold',
+            }}
+          >
+            My Pets
+          </Text>
+          <Text style={{ color: colors.textMuted, marginTop: spacing(2) }}>
+            Pet management is available on the Android app.
+          </Text>
+        </View>
+      </Screen>
+    );
+  }
+
   const { data: pets, isLoading, error } = usePets();
 
   if (isLoading) return <Spinner />;
