@@ -127,18 +127,27 @@ export function OnboardingStep1() {
   );
 }
 
+const AGE_STOPS = [
+  { label: 'Under 8',  value: 'under_8' },
+  { label: '8',        value: '8' },
+  { label: '9',        value: '9' },
+  { label: '10',       value: '10' },
+  { label: '11',       value: '11' },
+  { label: '12',       value: '12' },
+  { label: '13',       value: '13' },
+  { label: '14',       value: '14' },
+  { label: '15',       value: '15' },
+  { label: '16',       value: '16' },
+  { label: '17+',      value: '17_plus' },
+];
+
 export function OnboardingStep2() {
   const router = useRouter();
-  const [ageGroup, setAgeGroup] = useState(draft.ageGroup);
+  const defaultIdx = draft.ageGroup
+    ? Math.max(0, AGE_STOPS.findIndex((s) => s.value === draft.ageGroup))
+    : 5;
+  const [ageIdx, setAgeIdx] = useState(defaultIdx);
   const [equipmentLevel, setEquipmentLevel] = useState(draft.equipmentLevel);
-
-  const ages = [
-    { icon: '🧒', label: 'Youth (under 14)', value: 'youth' },
-    { icon: '🎓', label: 'High School', value: 'high_school' },
-    { icon: '🏫', label: 'College', value: 'college' },
-    { icon: '👨', label: 'Adult League', value: 'adult' },
-    { icon: '🧓', label: 'Senior (50+)', value: 'senior' },
-  ];
 
   const equipment = [
     { icon: '🔰', label: 'Beginner – just the basics', value: 'beginner' },
@@ -147,11 +156,13 @@ export function OnboardingStep2() {
   ];
 
   function next() {
-    if (!ageGroup || !equipmentLevel) return;
-    draft.ageGroup = ageGroup;
+    if (!equipmentLevel) return;
+    draft.ageGroup = AGE_STOPS[ageIdx]!.value;
     draft.equipmentLevel = equipmentLevel;
     router.push('/onboarding/step3');
   }
+
+  const currentStop = AGE_STOPS[ageIdx]!;
 
   return (
     <View style={{ flex: 1, backgroundColor: BG }}>
@@ -164,17 +175,55 @@ export function OnboardingStep2() {
 
         <ProgressDots step={2} />
 
-        <Text style={{ fontSize: 16, fontWeight: '800', color: TEXT, marginBottom: 16 }}>Age group</Text>
-        {ages.map((a) => (
-          <OptionCard key={a.value} icon={a.icon} label={a.label} selected={ageGroup === a.value} onPress={() => setAgeGroup(a.value)} />
-        ))}
+        {/* Age slider */}
+        <Text style={{ fontSize: 16, fontWeight: '800', color: TEXT, marginBottom: 8 }}>How old are you?</Text>
+        <View style={{ backgroundColor: SURFACE, borderRadius: 20, padding: 20, marginBottom: 24, borderWidth: 1.5, borderColor: '#DDD0BB' }}>
+          <View style={{ alignItems: 'center', marginBottom: 16 }}>
+            <Text style={{ fontSize: 40, fontWeight: '900', color: GOLD }}>{currentStop.label}</Text>
+            <Text style={{ fontSize: 13, color: MUTED, marginTop: 2 }}>years old</Text>
+          </View>
+          {/* Tick marks */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 }}>
+            {AGE_STOPS.map((_, i) => (
+              <View key={i} style={{ width: 2, height: i === ageIdx ? 14 : 6, backgroundColor: i === ageIdx ? GOLD : '#DDD0BB', borderRadius: 1 }} />
+            ))}
+          </View>
+          {/* Slider track with pressable segments */}
+          <View style={{ flexDirection: 'row', height: 8, backgroundColor: '#F5E6C8', borderRadius: 4, overflow: 'hidden' }}>
+            <View style={{ flex: ageIdx + 1, backgroundColor: GOLD, borderRadius: 4 }} />
+            <View style={{ flex: AGE_STOPS.length - ageIdx - 1 }} />
+          </View>
+          {/* Step buttons */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
+            <Pressable
+              onPress={() => setAgeIdx((i) => Math.max(0, i - 1))}
+              style={({ pressed }) => ({ backgroundColor: pressed ? '#DDD0BB' : '#F5E6C8', borderRadius: 20, width: 40, height: 40, alignItems: 'center', justifyContent: 'center' })}
+            >
+              <Text style={{ fontSize: 20, color: TEXT, fontWeight: '800' }}>−</Text>
+            </Pressable>
+            {/* Direct tick taps */}
+            <View style={{ flexDirection: 'row', gap: 4, alignItems: 'center' }}>
+              {AGE_STOPS.map((stop, i) => (
+                <Pressable key={i} onPress={() => setAgeIdx(i)} style={{ padding: 4 }}>
+                  <View style={{ width: i === ageIdx ? 10 : 6, height: i === ageIdx ? 10 : 6, borderRadius: 5, backgroundColor: i === ageIdx ? GOLD : '#DDD0BB' }} />
+                </Pressable>
+              ))}
+            </View>
+            <Pressable
+              onPress={() => setAgeIdx((i) => Math.min(AGE_STOPS.length - 1, i + 1))}
+              style={({ pressed }) => ({ backgroundColor: pressed ? '#DDD0BB' : '#F5E6C8', borderRadius: 20, width: 40, height: 40, alignItems: 'center', justifyContent: 'center' })}
+            >
+              <Text style={{ fontSize: 20, color: TEXT, fontWeight: '800' }}>+</Text>
+            </Pressable>
+          </View>
+        </View>
 
-        <Text style={{ fontSize: 16, fontWeight: '800', color: TEXT, marginBottom: 16, marginTop: 8 }}>Equipment level</Text>
+        <Text style={{ fontSize: 16, fontWeight: '800', color: TEXT, marginBottom: 16 }}>Equipment level</Text>
         {equipment.map((e) => (
           <OptionCard key={e.value} icon={e.icon} label={e.label} selected={equipmentLevel === e.value} onPress={() => setEquipmentLevel(e.value)} />
         ))}
 
-        <NextButton onPress={next} disabled={!ageGroup || !equipmentLevel} />
+        <NextButton onPress={next} disabled={!equipmentLevel} />
       </ScrollView>
     </View>
   );
