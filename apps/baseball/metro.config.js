@@ -13,4 +13,14 @@ config.resolver.nodeModulesPaths = [
   path.resolve(workspaceRoot, 'node_modules'),
 ];
 
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  if (moduleName === '@opentelemetry/api') {
+    return {
+      filePath: path.resolve(projectRoot, 'shims/opentelemetry-api.js'),
+      type: 'sourceFile',
+    };
+  }
+  return context.resolveRequest(context, moduleName, platform);
+};
+
 module.exports = config;
