@@ -8,7 +8,6 @@ export const createPetSchema = z.object({
   photoUrl: z.string().url().optional(),
   notes: z.string().max(2000).optional(),
 });
-
 export type CreatePetInput = z.infer<typeof createPetSchema>;
 
 export const createFeedingSchema = z.object({
@@ -18,7 +17,6 @@ export const createFeedingSchema = z.object({
   notes: z.string().max(1000).optional(),
   fedAt: z.string().datetime({ offset: true }),
 });
-
 export type CreateFeedingInput = z.infer<typeof createFeedingSchema>;
 
 export interface Pet {
@@ -30,7 +28,6 @@ export interface Pet {
   photoUrl: string | null;
   notes: string | null;
   ownerId: string | null;
-  syncStatus: 'synced' | 'pending' | 'conflict';
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -44,7 +41,6 @@ export interface Feeding {
   notes: string | null;
   fedAt: string;
   ownerId: string | null;
-  syncStatus: 'synced' | 'pending' | 'conflict';
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
@@ -68,6 +64,65 @@ export interface HealthRecord {
   description: string | null;
   recordDate: string;
   vetName: string | null;
+  ownerId: string | null;
+  createdAt: string;
+}
+
+export interface WalkLog {
+  id: string;
+  petId: string;
+  durationMinutes: number | null;
+  distanceKm: number | null;
+  routeNotes: string | null;
+  walkedAt: string;
+  ownerId: string | null;
+  createdAt: string;
+}
+
+export interface GroomingLog {
+  id: string;
+  petId: string;
+  groomingType: 'bath' | 'haircut' | 'nail_trim' | 'brushing' | 'ear_cleaning' | 'other';
+  notes: string | null;
+  groomedAt: string;
+  ownerId: string | null;
+  createdAt: string;
+}
+
+export interface Medication {
+  id: string;
+  petId: string;
+  name: string;
+  dosage: string | null;
+  frequency: string | null;
+  startDate: string;
+  endDate: string | null;
+  notes: string | null;
+  isActive: boolean;
+  ownerId: string | null;
+  createdAt: string;
+}
+
+export interface Appointment {
+  id: string;
+  petId: string;
+  title: string;
+  appointmentType: 'vet' | 'groomer' | 'other';
+  scheduledAt: string;
+  notes: string | null;
+  isCompleted: boolean;
+  ownerId: string | null;
+  createdAt: string;
+}
+
+export interface Expense {
+  id: string;
+  petId: string;
+  category: 'food' | 'vet' | 'grooming' | 'toys' | 'medicine' | 'other';
+  amount: number;
+  currency: string;
+  description: string | null;
+  expenseDate: string;
   ownerId: string | null;
   createdAt: string;
 }

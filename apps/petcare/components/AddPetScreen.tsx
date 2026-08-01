@@ -1,11 +1,17 @@
-import { useTheme } from '@microapps/core';
+﻿import { useTheme } from '@microapps/core';
 import { Button, Screen, TextInput } from '@microapps/ui';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { useCreatePet } from '../lib/pets';
 import { cardShadow } from '../lib/styles';
+import { DatePicker } from './DatePicker';
+
+const SPECIES_OPTIONS = ['Dog', 'Cat', 'Rabbit', 'Bird', 'Fish', 'Hamster', 'Other'];
+const SPECIES_EMOJIS: Record<string, string> = {
+  Dog: 'ðŸ•', Cat: 'ðŸˆ', Rabbit: 'ðŸ‡', Bird: 'ðŸ¦œ', Fish: 'ðŸ ', Hamster: 'ðŸ¹', Other: 'ðŸ¾',
+};
 
 export function AddPetScreen() {
   const { colors, typography, spacing, radii } = useTheme();
@@ -14,46 +20,105 @@ export function AddPetScreen() {
 
   const [name, setName] = useState('');
   const [species, setSpecies] = useState('');
+  const [customSpecies, setCustomSpecies] = useState('');
   const [breed, setBreed] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [notes, setNotes] = useState('');
   const [error, setError] = useState<string | null>(null);
 
+  const finalSpecies = species === 'Other' ? customSpecies : species;
+
   async function handleSave() {
     try {
       setError(null);
-      await createPet({ name, species, breed: breed || undefined, birthDate: birthDate || undefined, notes: notes || undefined });
+      if (!name.trim()) { setError('Name is required'); return; }
+      if (!finalSpecies.trim()) { setError('Species is required'); return; }
+      await createPet({
+        name: name.trim(),
+        species: finalSpecies.trim(),
+        breed: breed.trim() || undefined,
+        birthDate: birthDate || undefined,
+        notes: notes.trim() || undefined,
+      });
       router.back();
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Failed to save pet');
+      console.error('[AddPet] Failed to create pet:', e);
+      setError('Failed to save pet. Please try again.');
     }
   }
 
   return (
     <Screen>
-      <ScrollView contentContainerStyle={{ padding: spacing(4), paddingBottom: spacing(8) }} showsVerticalScrollIndicator={false}>
-        <Text style={{ fontSize: typography.size.xxl, fontWeight: '800', color: colors.text, marginBottom: spacing(5) }}>
-          Add Pet
+      <ScrollView
+        contentContainerStyle={{ padding: spacing(4), paddingBottom: spacing(8) }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={{ fontSize: typography.size.xxl, fontWeight: '800', color: colors.text, marginBottom: spacing(6) }}>
+          Add Pet ðŸ¾
         </Text>
 
-        <SectionCard colors={colors} radii={radii} spacing={spacing} title="Basic Info">
+        {/* Name */}
+        <SectionCard title="Basic Info" colors={colors} radii={radii} spacing={spacing}>
           <TextInput label="Name *" value={name} onChangeText={setName} placeholder="e.g. Buddy" />
-          <View style={{ height: spacing(3) }} />
-          <TextInput label="Species *" value={species} onChangeText={setSpecies} placeholder="e.g. Dog" />
-          <View style={{ height: spacing(3) }} />
+          <View style={{ height: spacing(4) }} />
           <TextInput label="Breed" value={breed} onChangeText={setBreed} placeholder="e.g. Labrador" />
         </SectionCard>
 
-        <SectionCard colors={colors} radii={radii} spacing={spacing} title="Details">
-          <TextInput label="Birth date" value={birthDate} onChangeText={setBirthDate} placeholder="YYYY-MM-DD" />
-          <View style={{ height: spacing(3) }} />
-          <TextInput label="Notes" value={notes} onChangeText={setNotes} placeholder="Any notes…" />
+        {/* Species picker */}
+        <SectionCard title="Species" colors={colors} radii={radii} spacing={spacing}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing(2) }}>
+            {SPECIES_OPTIONS.map((s) => (
+              <Pressable
+                key={s}
+                onPress={() => setSpecies(s)}
+                style={({ pressed }) => ({
+                  paddingHorizontal: spacing(3),
+                  paddingVertical: spacing(2),
+                  borderRadius: radii.lg,
+                  borderWidth: 2,
+                  borderColor: species === s ? colors.primary : colors.border,
+                  backgroundColor: species === s ? colors.primary : colors.surface,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: spacing(1),
+                  opacity: pressed ? 0.8 : 1,
+                })}
+              >
+                <Text style={{ fontSize: 16 }}>{SPECIES_EMOJIS[s]}</Text>
+                <Text style={{
+                  fontSize: typography.size.sm,
+                  fontWeight: '600',
+                  color: species === s ? colors.primaryText : colors.text,
+                }}>{s}</Text>
+              </Pressable>
+            ))}
+          </View>
+          {species === 'Other' && (
+            <View style={{ marginTop: spacing(3) }}>
+              <TextInput
+                label="Species name *"
+                value={customSpecies}
+                onChangeText={setCustomSpecies}
+                placeholder="e.g. Guinea pig"
+              />
+            </View>
+          )}
+        </SectionCard>
+
+        {/* Details */}
+        <SectionCard title="Details" colors={colors} radii={radii} spacing={spacing}>
+          <DatePicker label="Birth date" value={birthDate} onChange={setBirthDate} placeholder="Optional" />
+          <View style={{ height: spacing(4) }} />
+          <TextInput label="Notes" value={notes} onChangeText={setNotes} placeholder="Any notes about your petâ€¦" />
         </SectionCard>
 
         {error && (
-          <Text style={{ color: colors.danger, fontSize: typography.size.sm, marginBottom: spacing(3) }}>{error}</Text>
+          <View style={{ backgroundColor: '#FFF3F3', borderRadius: radii.md, padding: spacing(3), marginBottom: spacing(3), borderLeftWidth: 4, borderLeftColor: colors.danger }}>
+            <Text style={{ color: colors.danger, fontSize: typography.size.sm, fontWeight: '600' }}>{error}</Text>
+          </View>
         )}
-        <Button label={isPending ? 'Saving…' : 'Save pet'} onPress={handleSave} />
+
+        <Button label={isPending ? 'Savingâ€¦' : 'Save pet'} onPress={handleSave} />
         <View style={{ height: spacing(3) }} />
         <Button label="Cancel" variant="ghost" onPress={() => router.back()} />
       </ScrollView>

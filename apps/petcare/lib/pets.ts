@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
 import { useAuth } from '@microapps/core';
-
 import type { CreatePetInput } from './types';
 import { addPet, deletePet, getPet, listPets, updatePet } from './api';
 

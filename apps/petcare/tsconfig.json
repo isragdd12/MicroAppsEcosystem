@@ -13,7 +13,6 @@
   },
   "include": [
     "app",
-    "features",
     "components",
     "lib",
     "utils",

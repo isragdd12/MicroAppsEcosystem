@@ -39,22 +39,7 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
-    'expo-sqlite',
     'expo-secure-store',
-    [
-      'expo-image-picker',
-      {
-        photosPermission:
-          'Allow Pet Care to access your photos for pet pictures.',
-      },
-    ],
-    [
-      'expo-notifications',
-      {
-        icon: './assets/notification-icon.png',
-        color: '#4CAF50',
-      },
-    ],
   ],
   experiments: {
     typedRoutes: true,
